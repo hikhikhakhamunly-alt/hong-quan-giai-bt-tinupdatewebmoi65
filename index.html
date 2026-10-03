@@ -18,127 +18,163 @@
 }
 html,body{
   min-height:100%;font-family:'Quicksand',sans-serif;color:var(--text);
-  background:#020610;overflow-x:hidden;
+  background:#000308;overflow-x:hidden;
 }
 
-/* ===== NỀN XANH ĐEN GRADIENT ===== */
+/* ===== NỀN XANH ĐEN ===== */
 .bg{
-  position:fixed;inset:0;z-index:-2;
-  background:linear-gradient(135deg,#020610 0%,#0a1a3a 25%,#061030 50%,#0a0a2e 75%,#020610 100%);
-  background-size:400% 400%;
-  animation:bgMove 20s ease infinite;
+  position:fixed;inset:0;z-index:-3;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, #0a2050 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 80% 80%, #0a2a30 0%, transparent 60%),
+    linear-gradient(135deg,#000308,#050a1a 30%,#020815 60%,#000308);
+  animation:bgPulse 15s ease-in-out infinite;
 }
-@keyframes bgMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+@keyframes bgPulse{
+  0%,100%{filter:hue-rotate(0deg) brightness(1)}
+  50%{filter:hue-rotate(15deg) brightness(1.1)}
 }
 
-/* ===== ÁNH SÁNG XANH ===== */
+/* ===== ÁNH SÁNG DI CHUYỂN THEO CHUỘT ===== */
+.cursor-glow{
+  position:fixed;
+  width:600px;height:600px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle,
+    rgba(0,212,255,.15) 0%,
+    rgba(0,255,136,.08) 30%,
+    transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:opacity .3s;
+  z-index:-1;
+  filter:blur(40px);
+}
+
+/* ===== ÁNH SÁNG NỀN ===== */
 .glow{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
   background:
-    radial-gradient(ellipse 700px 500px at 15% 25%, rgba(0,212,255,.25), transparent 70%),
-    radial-gradient(ellipse 600px 400px at 85% 75%, rgba(0,255,136,.2), transparent 70%),
-    radial-gradient(ellipse 500px 400px at 50% 50%, rgba(177,77,255,.15), transparent 70%);
-  animation:glowPulse 8s ease-in-out infinite;
+    radial-gradient(ellipse 500px 400px at 10% 20%, rgba(0,212,255,.2), transparent 70%),
+    radial-gradient(ellipse 500px 400px at 90% 80%, rgba(0,255,136,.15), transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(177,77,255,.1), transparent 70%);
+  animation:glowPulse 6s ease-in-out infinite;
 }
 @keyframes glowPulse{
-  0%,100%{opacity:.6;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.1)}
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.15)}
 }
 
-/* ===== HẠT SÁNG ===== */
+/* ===== WAVE CHẠY NGANG ===== */
+.wave{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  height:200px;
+  z-index:-1;
+  background:linear-gradient(180deg,transparent,rgba(0,212,255,.08),rgba(0,255,136,.05));
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
+  animation:wave 8s ease-in-out infinite;
+}
+@keyframes wave{
+  0%,100%{transform:translateY(0) scaleY(1)}
+  50%{transform:translateY(-20px) scaleY(1.2)}
+}
+
+/* ===== PARTICLE ===== */
 .particles{
   position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
 }
 .particle{
-  position:absolute;width:4px;height:4px;
+  position:absolute;width:3px;height:3px;
   border-radius:50%;
   animation:float linear infinite;
 }
 @keyframes float{
-  0%{transform:translateY(100vh) scale(0);opacity:0}
+  0%{transform:translateY(100vh) scale(0) rotate(0deg);opacity:0}
   10%{opacity:1}
   90%{opacity:1}
-  100%{transform:translateY(-10vh) scale(1);opacity:0}
+  100%{transform:translateY(-10vh) scale(1.5) rotate(360deg);opacity:0}
 }
 
+/* ===== WRAP ===== */
 .wrap{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   padding:30px 20px;position:relative;z-index:1;
 }
 
-/* ===== CARD ===== */
-.box{
-  width:100%;max-width:680px;
-  background:linear-gradient(145deg,rgba(10,30,60,.75),rgba(5,15,35,.6));
-  border:1px solid rgba(0,212,255,.3);
-  border-radius:36px;
-  padding:64px 48px;
-  backdrop-filter:blur(30px) saturate(180%);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:
-    0 40px 100px rgba(0,0,0,.7),
-    0 0 100px rgba(0,212,255,.15),
-    inset 0 1px 0 rgba(0,212,255,.2);
-  position:relative;
-  animation:boxIn 1s cubic-bezier(.4,0,.2,1);
+/* ===== SPLIT LAYOUT ===== */
+.split{
+  width:100%;max-width:1100px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:30px;align-items:stretch;
+  animation:fadeUp 1s ease;
 }
-@keyframes boxIn{
-  from{opacity:0;transform:translateY(50px) scale(.95)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:none}
 }
-.box::before{
-  content:'';position:absolute;inset:-2px;
-  border-radius:38px;
-  background:conic-gradient(from 0deg,
-    transparent 0deg,
-    #00d4ff 60deg,
-    #00ff88 120deg,
-    #b14dff 180deg,
-    #ff66cc 240deg,
-    #00d4ff 300deg,
-    transparent 360deg);
-  animation:rotateBorder 8s linear infinite;
-  z-index:-1;opacity:.6;filter:blur(12px);
+@media(max-width:768px){
+  .split{grid-template-columns:1fr}
 }
-@keyframes rotateBorder{to{transform:rotate(360deg)}}
 
-/* ===== TIÊU ĐỀ CHỮ ĐỔI MÀU ===== */
-h1{
+/* ===== LEFT PANEL ===== */
+.left-panel{
+  background:linear-gradient(145deg,rgba(10,30,60,.7),rgba(5,15,35,.5));
+  border:1px solid rgba(0,212,255,.25);
+  border-radius:32px;
+  padding:60px 40px;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    0 0 80px rgba(0,212,255,.1),
+    inset 0 1px 0 rgba(0,212,255,.2);
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+
+/* Hiệu ứng glow nhẹ (thay led xoay) */
+.left-panel::before{
+  content:'';position:absolute;inset:0;
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,212,255,.25), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(0,255,136,.2), transparent 50%);
+  animation:glowBreath 5s ease-in-out infinite;
+  z-index:-1;
+  pointer-events:none;
+}
+@keyframes glowBreath{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.05)}
+}
+
+.left-panel h1{
   font-family:'Orbitron',sans-serif;
   font-size:72px;
-  text-align:center;
-  background:linear-gradient(90deg,
-    #00d4ff,
-    #00ff88,
-    #ffd700,
-    #ff66cc,
-    #b14dff,
-    #00d4ff);
+  background:linear-gradient(90deg,#00d4ff,#00ff88,#ffd700,#ff66cc,#b14dff,#00d4ff);
   background-size:300% auto;
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
   margin-bottom:16px;
-  letter-spacing:8px;
+  letter-spacing:4px;
   font-weight:900;
   animation:shineText 3s linear infinite;
   filter:drop-shadow(0 0 30px rgba(0,212,255,.7));
   line-height:1;
+  position:relative;
+  z-index:1;
 }
 @keyframes shineText{
   0%{background-position:0% center}
   100%{background-position:300% center}
 }
-
-/* ===== SUBTITLE CHỮ ĐỔI MÀU ===== */
-.sub{
+.left-panel .sub{
   font-family:'Orbitron',sans-serif;
-  font-size:16px;
-  margin-bottom:56px;
-  text-align:center;
+  font-size:14px;
+  margin-bottom:30px;
   letter-spacing:4px;
   font-weight:600;
   text-transform:uppercase;
@@ -148,16 +184,25 @@ h1{
   background-clip:text;
   color:transparent;
   animation:shineSub 2s linear infinite;
+  position:relative;
+  z-index:1;
 }
-@keyframes shineSub{
-  to{background-position:200% center}
+@keyframes shineSub{to{background-position:200% center}}
+
+.left-panel p.desc{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.8;
+  margin-top:20px;
+  position:relative;
+  z-index:1;
 }
 
-.panel{display:none}
-.panel.active{display:block;animation:panelIn .6s cubic-bezier(.4,0,.2,1)}
-@keyframes panelIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+/* ===== RIGHT PANEL — NÚT ===== */
+.right-panel{
+  display:flex;flex-direction:column;gap:20px;justify-content:center;
+}
 
-/* ===== NÚT ===== */
 .btn{
   display:flex;width:100%;padding:32px 28px;
   border:1px solid rgba(0,212,255,.25);
@@ -170,7 +215,6 @@ h1{
   background:linear-gradient(145deg,rgba(10,30,60,.6),rgba(5,15,35,.4));
   backdrop-filter:blur(10px);
   box-shadow:0 10px 30px rgba(0,0,0,.4),inset 0 1px 0 rgba(0,212,255,.15);
-  margin-bottom:20px;
 }
 .btn::before{
   content:'';position:absolute;top:0;left:-150%;
@@ -181,18 +225,17 @@ h1{
 .btn:hover::before{left:150%}
 .btn:hover{
   transform:translateY(-8px) scale(1.03);
-  box-shadow:0 25px 60px rgba(0,0,0,.6),0 0 60px rgba(0,212,255,.3),inset 0 1px 0 rgba(0,212,255,.3);
-  border-color:rgba(0,212,255,.6);
+  box-shadow:0 25px 60px rgba(0,0,0,.6),0 0 80px rgba(0,212,255,.4),inset 0 1px 0 rgba(0,212,255,.3);
+  border-color:rgba(0,212,255,.8);
 }
-.btn:active{transform:translateY(-4px) scale(1.01)}
 
 .btn .icon{
   font-size:48px;min-width:80px;height:80px;
   display:flex;align-items:center;justify-content:center;
   border-radius:20px;flex-shrink:0;
-  transition:transform .5s cubic-bezier(.4,0,.2,1);
+  transition:transform .5s;
   background:rgba(0,212,255,.15);
-  box-shadow:inset 0 2px 15px rgba(0,212,255,.2),0 5px 15px rgba(0,0,0,.3);
+  box-shadow:inset 0 2px 15px rgba(0,212,255,.3),0 5px 15px rgba(0,0,0,.3);
 }
 .btn:hover .icon{transform:scale(1.2) rotate(-10deg)}
 
@@ -207,40 +250,67 @@ h1{
   color:transparent;
   animation:shineLabel 3s linear infinite;
 }
-@keyframes shineLabel{
-  to{background-position:200% center}
-}
-.btn .desc{font-size:13px;opacity:.85;font-family:'Quicksand',sans-serif;font-weight:600;letter-spacing:.5px}
+@keyframes shineLabel{to{background-position:200% center}}
+.btn .desc{font-size:13px;opacity:.85;font-family:'Quicksand',sans-serif;font-weight:600}
 
 .btn-shop{
   background:linear-gradient(135deg,rgba(255,68,136,.3) 0%,rgba(255,102,204,.3) 100%);
   border-color:rgba(255,100,180,.4);
 }
 .btn-shop:hover{
-  box-shadow:0 25px 60px rgba(255,100,180,.5),0 0 60px rgba(255,100,180,.4),inset 0 1px 0 rgba(255,255,255,.2);
+  box-shadow:0 25px 60px rgba(255,100,180,.5),0 0 80px rgba(255,100,180,.4);
   border-color:rgba(255,100,180,.8);
 }
-
 .btn-student{
   background:linear-gradient(135deg,rgba(0,119,255,.3) 0%,rgba(0,212,255,.3) 100%);
   border-color:rgba(0,180,255,.4);
 }
 .btn-student:hover{
-  box-shadow:0 25px 60px rgba(0,180,255,.5),0 0 60px rgba(0,180,255,.4),inset 0 1px 0 rgba(255,255,255,.2);
+  box-shadow:0 25px 60px rgba(0,180,255,.5),0 0 80px rgba(0,180,255,.4);
   border-color:rgba(0,180,255,.8);
 }
 
-.btn-back{
-  background:rgba(0,212,255,.08);color:#fff;
+/* ===== SHOP PANEL ===== */
+.shop-wrap{
+  width:100%;max-width:680px;
+  background:linear-gradient(145deg,rgba(10,30,60,.7),rgba(5,15,35,.5));
   border:1px solid rgba(0,212,255,.3);
-  justify-content:center;font-size:14px;padding:16px;
-  margin-top:14px;border-radius:16px;width:100%;
-  font-family:'Orbitron',sans-serif;font-weight:700;
-  cursor:pointer;transition:all .3s;
+  border-radius:32px;
+  padding:50px 40px;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 80px rgba(0,212,255,.15);
+  animation:fadeUp .6s ease;
+  position:relative;overflow:hidden;
 }
-.btn-back:hover{background:rgba(0,212,255,.15);border-color:var(--cyan);transform:translateY(-3px)}
 
-/* ===== FORM ===== */
+/* Hiệu ứng glow cho shop (thay led xoay) */
+.shop-wrap::before{
+  content:'';position:absolute;inset:0;
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(0,212,255,.2), transparent 40%),
+    radial-gradient(circle at 100% 50%, rgba(0,255,136,.2), transparent 40%),
+    radial-gradient(circle at 50% 0%, rgba(255,102,204,.15), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(255,215,0,.15), transparent 40%);
+  animation:glowBreath 4s ease-in-out infinite;
+  z-index:0;
+  pointer-events:none;
+}
+
+.shop-wrap > *{position:relative;z-index:1}
+
+.shop-wrap h2{
+  font-family:'Orbitron',sans-serif;font-size:32px;text-align:center;
+  background:linear-gradient(90deg,#00d4ff,#00ff88,#ffd700,#ff66cc,#00d4ff);
+  background-size:300% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:24px;letter-spacing:4px;font-weight:900;
+  animation:shineText 3s linear infinite;
+  filter:drop-shadow(0 0 25px rgba(0,212,255,.6));
+}
+.shop-wrap p.info{color:var(--muted);font-size:14px;text-align:center;margin-bottom:24px}
+
 .plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
 @media(max-width:500px){.plan-grid{grid-template-columns:1fr}}
 .plan{
@@ -288,39 +358,37 @@ h1{
   background-size:200% auto;color:#001a0d;
   font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;
   cursor:pointer;transition:all .5s;margin-top:14px;
-  box-shadow:0 15px 40px rgba(0,212,255,.4),inset 0 1px 0 rgba(255,255,255,.3);
+  box-shadow:0 15px 40px rgba(0,212,255,.4);
   letter-spacing:2px;
 }
 .btn-submit:hover{
   background-position:200% center;transform:translateY(-5px);
-  box-shadow:0 25px 60px rgba(0,212,255,.6),inset 0 1px 0 rgba(255,255,255,.4);
+  box-shadow:0 25px 60px rgba(0,212,255,.6);
 }
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-/* ===== TIÊU ĐỀ PANEL ===== */
-h2{
-  font-family:'Orbitron',sans-serif;font-size:36px;text-align:center;
-  background:linear-gradient(90deg,#00d4ff,#00ff88,#ffd700,#ff66cc,#00d4ff);
-  background-size:300% auto;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  margin-bottom:28px;letter-spacing:5px;font-weight:900;
-  animation:shineText 3s linear infinite;
-  filter:drop-shadow(0 0 25px rgba(0,212,255,.6));
+.btn-back{
+  background:rgba(0,212,255,.08);color:#fff;
+  border:1px solid rgba(0,212,255,.3);
+  justify-content:center;font-size:14px;padding:16px;
+  margin-top:14px;border-radius:16px;width:100%;
+  font-family:'Orbitron',sans-serif;font-weight:700;
+  cursor:pointer;transition:all .3s;
 }
-p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margin-bottom:32px}
+.btn-back:hover{background:rgba(0,212,255,.15);border-color:var(--cyan);transform:translateY(-3px)}
 
 .msg{
   padding:16px 20px;border-radius:16px;font-size:14px;
   margin-top:20px;display:none;line-height:1.7;white-space:pre-line;text-align:center;
-  font-weight:600;backdrop-filter:blur(10px);
+  font-weight:600;
 }
-.msg.show{display:block;animation:panelIn .4s}
+.msg.show{display:block}
 .msg.success{background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.5);color:#7dffb0}
 .msg.error{background:rgba(255,60,100,.15);border:1px solid rgba(255,60,100,.5);color:#ff8ba5}
 .msg.warn{background:rgba(255,204,0,.15);border:1px solid rgba(255,204,0,.5);color:#ffdd66}
 
 .footer{
-  margin-top:40px;padding-top:28px;
+  margin-top:30px;padding-top:20px;
   border-top:1px solid rgba(0,212,255,.15);
   color:var(--muted);font-size:12px;text-align:center;letter-spacing:1.5px;
 }
@@ -332,8 +400,7 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
   display:none;align-items:center;justify-content:center;
   z-index:9999;padding:20px;
 }
-.modal-overlay.show{display:flex;animation:modalFade .3s}
-@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.modal-overlay.show{display:flex}
 .modal{
   width:100%;max-width:460px;
   background:linear-gradient(145deg,rgba(10,30,60,.98),rgba(5,15,35,.98));
@@ -363,7 +430,6 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
   -webkit-background-clip:text;background-clip:text;color:transparent;
   margin-bottom:16px;letter-spacing:2px;font-weight:900;
   animation:shineLabel 2s linear infinite;
-  filter:drop-shadow(0 0 20px rgba(0,212,255,.6));
 }
 .modal p{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:12px}
 .modal .order-code{
@@ -373,7 +439,6 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
   border-radius:14px;
   font-family:'Orbitron',monospace;font-size:18px;font-weight:900;
   color:var(--cyan);letter-spacing:3px;
-  box-shadow:0 0 30px rgba(0,212,255,.4);
 }
 .modal .note{
   font-size:12px;color:var(--muted);
@@ -391,15 +456,17 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
 }
 .modal .btn-close:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,212,255,.6)}
 
+@media(max-width:768px){
+  .left-panel h1{font-size:52px}
+  .left-panel{padding:44px 28px}
+  .shop-wrap{padding:32px 22px}
+}
 @media(max-width:560px){
-  h1{font-size:44px;letter-spacing:4px}
-  .box{padding:44px 26px;border-radius:28px}
-  .sub{margin-bottom:40px;font-size:12px}
-  .btn{padding:24px 20px;gap:14px}
+  .left-panel h1{font-size:42px;letter-spacing:3px}
+  .btn{padding:24px 20px}
   .btn .icon{font-size:36px;min-width:60px;height:60px}
   .btn .label{font-size:16px}
-  .btn .desc{font-size:11px}
-  h2{font-size:26px}
+  .shop-wrap h2{font-size:24px}
 }
 </style>
 </head>
@@ -407,35 +474,48 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
 
 <div class="bg"></div>
 <div class="glow"></div>
+<div class="wave"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
 <div class="particles" id="particles"></div>
 
 <div class="wrap">
-  <div class="box">
+  <div id="mainView" style="width:100%;display:flex;justify-content:center;">
 
-    <div id="menuPanel" class="panel active">
-      <h1>HỒNG QUÂN</h1>
-      <p class="sub">✨ Giải Bài Tập Tin ✨</p>
+    <!-- MENU -->
+    <div id="menuPanel" class="split">
+      <div class="left-panel">
+        <h1>HỒNG<br>QUÂN</h1>
+        <p class="sub">✨ Giải Bài Tập Tin ✨</p>
+        <p class="desc">
+          Hệ thống hỗ trợ học sinh giải bài tập Tin học.
+          Mua KEY VIP để mở khóa toàn bộ tính năng,
+          hoặc gửi bài tập trực tiếp cho thầy/cô.
+        </p>
+      </div>
 
-      <button class="btn btn-shop" onclick="showPanel('shopPanel')">
-        <span class="icon">🛒</span>
-        <span class="text">
-          <span class="label">MUA KEY VIP</span>
-          <span class="desc">Chọn gói và đặt mua KEY</span>
-        </span>
-      </button>
+      <div class="right-panel">
+        <button class="btn btn-shop" onclick="showShop()">
+          <span class="icon">🛒</span>
+          <span class="text">
+            <span class="label">MUA KEY VIP</span>
+            <span class="desc">Chọn gói và đặt mua KEY</span>
+          </span>
+        </button>
 
-      <a href="form.html" class="btn btn-student">
-        <span class="icon">📝</span>
-        <span class="text">
-          <span class="label">GỬI BÀI TẬP</span>
-          <span class="desc">Nhập KEY và gửi bài tập</span>
-        </span>
-      </a>
+        <a href="form.html" class="btn btn-student">
+          <span class="icon">📝</span>
+          <span class="text">
+            <span class="label">GỬI BÀI TẬP</span>
+            <span class="desc">Nhập KEY và gửi bài tập</span>
+          </span>
+        </a>
 
-      <div class="footer">© 2026 Hồng Quân – Giải Bài Tập Tin</div>
+        <div class="footer">© 2026 Hồng Quân – Giải Bài Tập Tin</div>
+      </div>
     </div>
 
-    <div id="shopPanel" class="panel">
+    <!-- SHOP -->
+    <div id="shopPanel" class="shop-wrap" style="display:none">
       <h2>🛒 MUA KEY VIP</h2>
       <p class="info">Chọn gói thành viên phù hợp với bạn.</p>
 
@@ -460,7 +540,7 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
 
       <div class="form-group">
         <label>TÊN TÀI KHOẢN TRÊN WEB</label>
-        <input id="buyerName" type="text" placeholder="Nhập tên tài khoản" autocomplete="username">
+        <input id="buyerName" type="text" placeholder="Nhập tên tài khoản">
       </div>
 
       <div class="form-group">
@@ -483,12 +563,7 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
       <button class="btn-submit" id="orderBtn" onclick="createKeyOrder()">🚀 TẠO ĐƠN MUA KEY</button>
       <div id="shopMsg" class="msg"></div>
 
-      <p class="info" style="margin-top:22px;font-size:12px">
-        Đơn hàng sẽ ở trạng thái <b style="color:var(--gold)">chờ xác nhận</b>.<br>
-        KEY chỉ được cấp sau khi quản lý xác minh thanh toán.
-      </p>
-
-      <button class="btn btn-back" onclick="showPanel('menuPanel')">← Quay lại</button>
+      <button class="btn-back" onclick="showMenu()">← Quay lại</button>
       <div class="footer">© 2026 Hồng Quân</div>
     </div>
 
@@ -504,8 +579,7 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
     <div class="order-code" id="modalCode">#HQ000</div>
     <div class="note">
       📧 Email thông báo đã gửi đến admin<br>
-      ⏰ Thời gian xử lý: 5-30 phút<br>
-      📞 Liên hệ nếu cần gấp
+      ⏰ Thời gian xử lý: 5-30 phút
     </div>
     <button class="btn-close" onclick="closeModal()">✓ ĐÃ HIỂU</button>
   </div>
@@ -514,6 +588,14 @@ p.info{color:var(--muted);font-size:14px;line-height:1.8;text-align:center;margi
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqE64nXo-wxqYe2t3temRRpUmqHItE27BJgjncnT_6l4Ew-kbIO23W6ONnGWqqQGXsGA/exec";
 
+// Ánh sáng theo chuột
+document.addEventListener('mousemove', (e) => {
+  const g = document.getElementById('cursorGlow');
+  g.style.left = e.clientX + 'px';
+  g.style.top = e.clientY + 'px';
+});
+
+// Particles
 (function(){
   const container = document.getElementById('particles');
   const colors = ['#00d4ff','#00ff88','#b14dff','#ff66cc','#ffd700'];
@@ -530,9 +612,14 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqE64nXo-wxqYe2t3te
   }
 })();
 
-function showPanel(id){
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function showShop(){
+  document.getElementById('menuPanel').style.display = 'none';
+  document.getElementById('shopPanel').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function showMenu(){
+  document.getElementById('menuPanel').style.display = 'grid';
+  document.getElementById('shopPanel').style.display = 'none';
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
