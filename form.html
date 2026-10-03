@@ -103,4 +103,359 @@ h1{
 }
 .btn-back:hover{background:rgba(0,255,136,.1);border-color:var(--neon)}
 .msg{
-  padding:
+  padding:14px 16px;border-radius:12px;font-size:14px;
+  margin-top:16px;display:none;line-height:1.6;white-space:pre-line;text-align:center;
+  font-weight:600;
+}
+.msg.show{display:block;animation:fadeUp .3s}
+.msg.success{background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.5);color:#7dffb0}
+.msg.error{background:rgba(255,60,100,.12);border:1px solid rgba(255,60,100,.5);color:#ff8ba5}
+.msg.warn{background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.5);color:#ffdd66}
+.key-display{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;background:rgba(0,255,136,.1);
+  border:1px solid rgba(0,255,136,.5);border-radius:12px;
+  margin-bottom:20px;font-family:monospace;
+}
+.key-display .icon{font-size:20px}
+.key-display .info{flex:1}
+.key-display .label{font-size:11px;color:var(--muted);text-transform:uppercase;font-family:'Quicksand',sans-serif;font-weight:700;letter-spacing:1px}
+.key-display .value{font-size:14px;color:var(--neon);font-weight:700;margin-top:2px}
+.key-display .status{
+  font-size:11px;padding:3px 10px;border-radius:20px;
+  background:rgba(0,255,136,.2);color:var(--neon);
+  font-family:'Quicksand',sans-serif;font-weight:700;
+}
+.footer{
+  margin-top:28px;padding-top:20px;
+  border-top:1px solid rgba(0,255,136,.15);
+  color:var(--muted);font-size:12px;text-align:center;
+}
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.8);
+  backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;
+  z-index:9999;padding:20px;
+}
+.modal-overlay.show{display:flex;animation:fadeUp .3s}
+.modal{
+  width:100%;max-width:440px;
+  background:linear-gradient(145deg,rgba(8,30,18,.95),rgba(4,20,12,.95));
+  border:2px solid var(--neon);border-radius:24px;
+  padding:40px 32px;text-align:center;
+  box-shadow:0 20px 80px rgba(0,255,136,.4);
+  animation:modalIn .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.8) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal .spinner{
+  width:70px;height:70px;margin:0 auto 24px;
+  border:5px solid rgba(0,255,136,.2);
+  border-top-color:var(--neon);border-radius:50%;
+  animation:spin 1s linear infinite;
+  box-shadow:0 0 30px rgba(0,255,136,.5);
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal h3{
+  font-family:'Orbitron',sans-serif;font-size:22px;
+  color:var(--neon);margin-bottom:14px;
+  letter-spacing:1px;text-shadow:0 0 20px rgba(0,255,136,.6);
+}
+.modal p{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:10px}
+.modal .order-code{
+  display:inline-block;margin:20px 0;padding:10px 20px;
+  background:rgba(0,255,136,.15);
+  border:1px solid rgba(0,255,136,.5);border-radius:12px;
+  font-family:'Orbitron',monospace;font-size:16px;font-weight:700;
+  color:var(--neon);letter-spacing:2px;
+}
+.modal .note{
+  font-size:12px;color:var(--muted);
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid rgba(0,255,136,.2);
+}
+.modal .btn-close{
+  width:100%;padding:14px;margin-top:20px;
+  border:none;border-radius:14px;
+  background:linear-gradient(135deg,#00aa55,#00ff88);
+  color:#001a0d;
+  font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .3s;letter-spacing:1px;
+}
+.modal .btn-close:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,255,136,.5)}
+@media(max-width:560px){
+  h1{font-size:24px}
+  .container{padding:28px 20px;border-radius:20px}
+  .section{padding:16px}
+}
+</style>
+</head><body>
+
+<div class="container">
+  <h1>📝 GỬI BÀI TẬP</h1>
+  <p class="sub">Nhập KEY và gửi bài tập của bạn</p>
+
+  <div id="stepKey" class="section">
+    <h2>🔑 Bước 1: Nhập KEY</h2>
+    <div class="form-group">
+      <label>KEY CỦA BẠN</label>
+      <input type="text" id="keyInput" placeholder="VD: HQ-M1-XXXXX-XXXXX" style="font-family:monospace;text-transform:uppercase" />
+    </div>
+    <button class="btn btn-submit" id="checkKeyBtn" onclick="checkKey()">🔓 KIỂM TRA KEY</button>
+    <div id="keyMsg" class="msg"></div>
+  </div>
+
+  <div id="stepForm" class="section" style="display:none">
+    <div class="key-display">
+      <span class="icon">✅</span>
+      <div class="info">
+        <div class="label">KEY đang dùng</div>
+        <div class="value" id="keyDisplay">-</div>
+      </div>
+      <span class="status">Hợp lệ</span>
+    </div>
+
+    <h2>📤 Bước 2: Gửi bài tập</h2>
+
+    <div class="form-group">
+      <label>HỌ VÀ TÊN</label>
+      <input type="text" id="studentName" placeholder="VD: Nguyễn Văn A" required />
+    </div>
+
+    <div class="form-group">
+      <label>LỚP</label>
+      <input type="text" id="studentClass" placeholder="VD: 11A1" required />
+    </div>
+
+    <div class="form-group">
+      <label>TIÊU ĐỀ BÀI</label>
+      <input type="text" id="postTitle" placeholder="VD: Bài tập tuần 5" required />
+    </div>
+
+    <div class="form-group">
+      <label>NỘI DUNG BÀI</label>
+      <textarea id="postContent" placeholder="Nhập nội dung bài tập hoặc link Google Drive, Zalo..." required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>ĐÍNH KÈM FILE (tùy chọn)</label>
+      <label class="file-label">
+        <span class="icon">📎</span>
+        <span id="fileNameText">Bấm để chọn file (ảnh, PDF, Word...)</span>
+        <input type="file" id="fileInput" onchange="updateFileName()">
+      </label>
+      <div class="file-name" id="fileName"></div>
+    </div>
+
+    <button class="btn btn-submit" id="submitBtn" onclick="submitPost()">🚀 GỬI BÀI</button>
+    <button class="btn btn-back" onclick="resetForm()">← Đổi KEY khác</button>
+    <div id="submitMsg" class="msg"></div>
+  </div>
+
+  <button class="btn btn-back" onclick="location.href='index.html'">← Về trang chủ</button>
+
+  <div class="footer">© 2026 Hồng Quân – Giải Bài Tập Tin</div>
+</div>
+
+<div class="modal-overlay" id="waitingModal">
+  <div class="modal">
+    <div class="spinner"></div>
+    <h3>⏳ ĐANG CHỜ XÁC NHẬN</h3>
+    <p>Bài của bạn đã được gửi đến thầy/cô!</p>
+    <p>Vui lòng đợi admin kiểm tra và phản hồi.</p>
+    <div class="order-code" id="modalCode">#HQ000</div>
+    <div class="note">
+      📧 Email xác nhận đã được gửi<br>
+      ⏰ Thời gian xử lý: 5-30 phút
+    </div>
+    <button class="btn-close" onclick="closeModal()">✓ ĐÃ HIỂU</button>
+  </div>
+</div><script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqE64nXo-wxqYe2t3temRRpUmqHItE27BJgjncnT_6l4Ew-kbIO23W6ONnGWqqQGXsGA/exec";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBgMM_kWB6jDjTYgP2j-GEnMXKXTwxDdss",
+  authDomain: "hongquan-web.firebaseapp.com",
+  databaseURL: "https://hongquan-web-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hongquan-web",
+  storageBucket: "hongquan-web.firebasestorage.app",
+  messagingSenderId: "117599956210",
+  appId: "1:117599956210:web:492dc0a9c290c4e346346b"
+};
+
+let currentKey = null;
+let db = null;
+
+(async function initFirebase() {
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getDatabase } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    console.log("✅ Firebase kết nối");
+  } catch (err) {
+    console.error("❌ Lỗi Firebase:", err);
+  }
+})();
+
+async function checkKey() {
+  const keyInput = document.getElementById("keyInput");
+  const btn = document.getElementById("checkKeyBtn");
+  const msg = document.getElementById("keyMsg");
+  const keyValue = keyInput.value.trim().toUpperCase();
+
+  if (!keyValue) {
+    msg.textContent = "⚠️ Vui lòng nhập KEY!";
+    msg.className = "msg warn show";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "⏳ Đang kiểm tra...";
+  msg.className = "msg";
+
+  try {
+    if (!db) throw new Error("Firebase chưa kết nối, thử lại sau 1-2 giây");
+    const { ref, get } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
+    const snap = await get(ref(db, "keys"));
+    const keys = snap.val() || {};
+    const keyEntry = Object.entries(keys).find(([id, k]) => k.key === keyValue);
+
+    if (!keyEntry) {
+      msg.textContent = "❌ KEY không tồn tại!";
+      msg.className = "msg error show";
+      return;
+    }
+
+    const [keyId, keyData] = keyEntry;
+
+    if (keyData.status === "locked") {
+      msg.textContent = "🔒 KEY đã bị khóa!";
+      msg.className = "msg error show";
+      return;
+    }
+
+    if (keyData.expiresAt && Date.now() > keyData.expiresAt) {
+      msg.textContent = "⚠️ KEY đã hết hạn!";
+      msg.className = "msg error show";
+      return;
+    }
+
+    currentKey = { id: keyId, ...keyData };
+    document.getElementById("keyDisplay").textContent = keyValue;
+    document.getElementById("stepKey").style.display = "none";
+    document.getElementById("stepForm").style.display = "block";
+
+  } catch (err) {
+    msg.textContent = "❌ Lỗi: " + err.message;
+    msg.className = "msg error show";
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🔓 KIỂM TRA KEY";
+  }
+}
+
+function updateFileName() {
+  const input = document.getElementById("fileInput");
+  const nameEl = document.getElementById("fileName");
+  if (input.files.length > 0) {
+    nameEl.textContent = "📎 " + input.files[0].name;
+  } else {
+    nameEl.textContent = "";
+  }
+}
+
+async function submitPost() {
+  const name = document.getElementById("studentName").value.trim();
+  const cls = document.getElementById("studentClass").value.trim();
+  const title = document.getElementById("postTitle").value.trim();
+  const content = document.getElementById("postContent").value.trim();
+  const fileInput = document.getElementById("fileInput");
+  const btn = document.getElementById("submitBtn");
+  const msg = document.getElementById("submitMsg");
+
+  if (!name || !cls || !title || !content) {
+    msg.textContent = "⚠️ Vui lòng nhập đầy đủ thông tin!";
+    msg.className = "msg warn show";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "⏳ Đang gửi...";
+  msg.className = "msg";
+
+  try {
+    let fileName = "";
+    if (fileInput.files.length > 0) {
+      fileName = fileInput.files[0].name;
+    }
+
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "submitPost",
+        studentName: name,
+        studentClass: cls,
+        title: title,
+        content: content,
+        fileName: fileName,
+        keyUsed: currentKey.key,
+        time: new Date().toLocaleString("vi-VN")
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success === true) {
+      document.getElementById("studentName").value = "";
+      document.getElementById("studentClass").value = "";
+      document.getElementById("postTitle").value = "";
+      document.getElementById("postContent").value = "";
+      document.getElementById("fileInput").value = "";
+      document.getElementById("fileName").textContent = "";
+
+      const code = "#HQ" + Math.random().toString(36).substring(2, 8).toUpperCase();
+      document.getElementById("modalCode").textContent = code;
+      document.getElementById("waitingModal").classList.add("show");
+    } else {
+      msg.textContent = "❌ Lỗi: " + (result.message || "Không rõ");
+      msg.className = "msg error show";
+    }
+
+  } catch (err) {
+    msg.textContent = "❌ Lỗi kết nối: " + err.message;
+    msg.className = "msg error show";
+    console.error("❌ Lỗi fetch:", err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🚀 GỬI BÀI";
+  }
+}
+
+function closeModal() {
+  document.getElementById("waitingModal").classList.remove("show");
+}
+
+function resetForm() {
+  currentKey = null;
+  document.getElementById("keyInput").value = "";
+  document.getElementById("stepKey").style.display = "block";
+  document.getElementById("stepForm").style.display = "none";
+  document.getElementById("keyMsg").className = "msg";
+  document.getElementById("submitMsg").className = "msg";
+}
+
+window.checkKey = checkKey;
+window.submitPost = submitPost;
+window.updateFileName = updateFileName;
+window.resetForm = resetForm;
+window.closeModal = closeModal;
+
+document.getElementById("keyInput").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") checkKey();
+});
+</script>
+
+</body>
+</html>
