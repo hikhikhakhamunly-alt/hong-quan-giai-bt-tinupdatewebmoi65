@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>📝 Gửi Bài Tập – Hồng Quân</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --neon:#00ff88;--lime:#7dff00;--mint:#00ffc8;
+  --blue:#00d4ff;--blue2:#0077ff;
+  --gold:#ffd700;--purple:#b14dff;
+  --text:#e8ffe8;--muted:#7fbf9f;
+  --card:rgba(8,30,18,.75);--border:rgba(0,255,136,.4);
+  --red:#ff4d6d;
+}
+html,body{
+  min-height:100%;font-family:'Quicksand',sans-serif;color:var(--text);
+  background:linear-gradient(-45deg,#04170d,#0a2e18,#062012,#0f3a1f);
+  background-size:400% 400%;
+  animation:bgMove 20s ease infinite;
+  padding:24px 16px;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.container{
+  max-width:720px;margin:0 auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;padding:44px 36px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 80px rgba(0,255,136,.15),inset 0 1px 0 rgba(255,255,255,.1);
+  animation:fadeUp .6s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+h1{
+  font-family:'Orbitron',sans-serif;font-size:32px;text-align:center;
+  background:linear-gradient(90deg,var(--neon),var(--lime),var(--mint));
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:8px;letter-spacing:2px;
+  animation:shineText 3s linear infinite;
+  filter:drop-shadow(0 0 15px rgba(0,255,136,.5));
+}
+@keyframes shineText{to{background-position:200% center}}
+.sub{color:var(--muted);font-size:14px;margin-bottom:32px;text-align:center}
+.section{
+  background:rgba(4,20,12,.6);
+  border:1px solid rgba(0,255,136,.2);
+  border-radius:16px;padding:20px;margin-bottom:20px;
+}
+.section h2{
+  font-family:'Orbitron',sans-serif;font-size:15px;
+  color:var(--mint);margin-bottom:14px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.form-group label{font-size:13px;font-weight:700;color:var(--mint);letter-spacing:.5px}
+.form-group input,.form-group textarea{
+  padding:13px 16px;
+  background:rgba(4,20,12,.85);
+  border:1px solid rgba(0,255,136,.25);
+  border-radius:12px;color:var(--text);font-family:inherit;font-size:14px;
+  outline:none;transition:all .3s;width:100%
+}
+.form-group input:focus,.form-group textarea:focus{
+  border-color:var(--neon);
+  box-shadow:0 0 0 4px rgba(0,255,136,.15),0 0 20px rgba(0,255,136,.3);
+}
+.form-group textarea{resize:vertical;min-height:110px;font-family:inherit}
+.file-label{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:20px;background:rgba(4,20,12,.6);
+  border:2px dashed rgba(0,255,136,.4);border-radius:12px;
+  cursor:pointer;color:var(--muted);font-size:14px;font-weight:600;
+  transition:all .3s;
+}
+.file-label:hover{border-color:var(--neon);background:rgba(0,255,136,.08);color:var(--neon)}
+.file-label input{display:none}
+.file-label .icon{font-size:24px}
+.file-name{color:var(--neon);font-weight:600;margin-top:8px;text-align:center;font-size:13px}
+.btn{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .35s;letter-spacing:1px;
+}
+.btn-submit{
+  background:linear-gradient(135deg,#00aa55,#00ff88,#00ffc8);
+  background-size:200% auto;color:#001a0d;
+  box-shadow:0 8px 25px rgba(0,255,136,.4);margin-top:12px;
+}
+.btn-submit:hover{background-position:200% center;transform:translateY(-3px);box-shadow:0 15px 40px rgba(0,255,136,.6)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-back{
+  background:rgba(255,255,255,.06);color:var(--text);
+  border:1px solid var(--border);margin-top:12px;padding:12px;
+  font-size:13px;width:100%;border-radius:14px;cursor:pointer;
+  font-family:'Orbitron',sans-serif;font-weight:700;transition:all .3s;
+}
+.btn-back:hover{background:rgba(0,255,136,.1);border-color:var(--neon)}
+.msg{
+  padding:
